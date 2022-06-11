@@ -1,0 +1,42 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check Typescript standards
+yarn check-types ||
+(
+  echo "❌❌❌ TypeScript check failed ❌❌❌"
+  exit 1
+)
+
+echo "✅✅✅ TypeScript check passed ✅✅✅"
+
+# Check Prettier Standards
+yarn check-format ||
+(
+  echo "❌❌❌ Prettier check failed ❌❌❌"
+  exit 1
+)
+
+echo "✅✅✅ Prettier check passed ✅✅✅"
+
+# Check ESLint Standards
+yarn check-lint ||
+(
+  echo "❌❌❌ ESLint check failed ❌❌❌
+          Make the required cahnges listed above, add changes an try to commit again."
+  exit 1
+)
+
+# If everyting passes... try to run a build
+echo '✅✅✅ Allright...Code looks good...Trying to build now...✅✅✅'
+
+yarn build ||
+(
+  echo "❌❌❌ Build failed ❌❌❌
+          Next build failed: View the errors above to see what went wrong"
+  exit 1
+)
+
+#IF it builds we can commit
+echo "✅✅✅ Build successful ✅✅✅
+        🥳🥳🥳 Committing now 🎉🎉🎉"
